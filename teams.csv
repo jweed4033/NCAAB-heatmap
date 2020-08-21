@@ -1,0 +1,37 @@
+name,market,win_team_id,year,three_points_att,region,three_points_att_rate
+Hoosiers,Indiana,c3f0a8ce-af67-497f-a750-3b859376b20a,2013,16.0714286,East,0.29408
+Cavaliers,Virginia,56913910-87f7-4ad7-ae3b-5cd9fb218fd9,2014,14.4166667,East,0.27474
+Wildcats,Villanova,4383eb6a-7fd8-4ff2-94c5-43c933121e88,2015,26.38889,East,0.42679
+Tar Heels,North Carolina,e9ca48b2-00ba-41c0-a02b-6885a2da1ff1,2016,17.68292683,East,0.30308
+Wildcats,Villanova,4383eb6a-7fd8-4ff2-94c5-43c933121e88,2017,24.166667,East,0.47459
+Wildcats,Villanova,4383eb6a-7fd8-4ff2-94c5-43c933121e88,2018,30.0769231,East,0.53541
+Cardinals,Louisville,b795ddbc-baab-4499-8803-52e8608520ab,2013,23.5,Midwest,0.3508
+Shockers,Wichita State,f38b58de-3273-4723-a78b-2f918e9aa2d5,2014,20.97222,Midwest,0.34661
+Wildcats,Kentucky,2267a1f4-68f6-418b-aaf6-2aa0c4b291f1,2015,14.8947368,Midwest,0.30991
+Cavaliers,Virginia,56913910-87f7-4ad7-ae3b-5cd9fb218fd9,2016,15.5,Midwest,0.33022
+Jayhawks,Kansas,fae4855b-1b64-4b40-a632-9ed345e1e952,2017,23.861111,Midwest,0.41167
+Jayhawks,Kansas,fae4855b-1b64-4b40-a632-9ed345e1e952,2018,24.1538462,Midwest,0.34915
+Jayhawks,Kansas,fae4855b-1b64-4b40-a632-9ed345e1e952,2013,15.166667,South,0.28704
+Gators,Florida,912f8837-1d81-4ef9-a576-a21f271d4c64,2014,20.1794872,South,0.3823
+Blue Devils,Duke,faeb1160-5d15-4f26-99fc-c441cf21fc7f,2015,19.475,South,0.39841
+Jayhawks,Kansas,fae4855b-1b64-4b40-a632-9ed345e1e952,2016,19.7692308,South,0.35887
+Tar Heels,North Carolina,e9ca48b2-00ba-41c0-a02b-6885a2da1ff1,2017,20.28205128,South,0.35126
+Cavaliers,Virginia,56913910-87f7-4ad7-ae3b-5cd9fb218fd9,2018,19.047619,South,0.39543
+Bulldogs,Gonzaga,2f4d21f8-6d5f-48a5-abca-52a30583871a,2013,20.1428571,West,0.32756
+Wildcats,Arizona,9b166a3f-e64b-4825-bb6b-92c6f0418263,2014,15.0263158,West,0.25919
+Badgers,Wisconsin,c7569eae-5b93-4197-b204-6f3a62146b25,2015,19.1,West,0.3422
+Ducks,Oregon,1da70895-f77f-44ef-b216-d63c02e696eb,2016,20.825,West,0.38767
+Bulldogs,Gonzaga,2f4d21f8-6d5f-48a5-abca-52a30583871a,2017,21.1707317,West,0.39407
+Musketeers,Xavier,0d8a328f-20ce-410b-bed1-15fc01308aaf,2018,21.6,West,0.3743
+,,,2013,,League Average,0.375377662
+,,,2014,,League Average,0.342124057
+,,,2015,,League Average,0.341424724
+,,,2016,,League Average,0.3519
+,,,2017,,League Average,0.3521
+,,,2018,,League Average,0.3454
+,,,2013,,Tournament #1 Seed Avg.,0.31487
+,,,2014,,Tournament #1 Seed Avg.,0.31571
+,,,2015,,Tournament #1 Seed Avg.,0.3693275
+,,,2016,,Tournament #1 Seed Avg.,0.34496
+,,,2017,,Tournament #1 Seed Avg.,0.4078975
+,,,2018,,Tournament #1 Seed Avg.,0.4135725

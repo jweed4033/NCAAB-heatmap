@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project 1</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .legend span {
+            margin-right: 10px;
+        }
+        .gridlines{
+            color: lightgrey;
+        }
+        body {
+          background-blend-mode: lighten;
+        }
+        h1{
+            text-align: center;
+            font-size: 35px;
+            text-decoration: underline;
+            font-family: courier;
+        }
+        .context{
+          width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 50px;
+        }
+        .context p{
+          text-align: left;
+          font-size: 20px;
+          text-decoration: none;
+          font-family: courier;
+        }
+        #q1{
+            margin-left:auto;
+            margin-right:auto;
+            display:block;
+        }
+        #scatterLegend{
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        #heatmap{
+            margin-left:300px;
+            margin-right:auto;
+            display:block;
+        }
+    </style>
+</head>
+<body>
+    <div class = "context">
+      <p>In basketball, a shot from beyond the "three-point-line" is worth three points, while all others are worth two. Over the past few years, the NBA has seen a notable increase in three-point attempts. We want to ask, is the same thing happening in college basketball? The heat map below shows which shots were more popular in 2013, compared to 2017 in the NCAA.</p>
+    </div>
+    <h1>Shot selection popularity comparison in the NCAA:</h1>
+    <script>
+
+    //heatmap
+    var svg = d3.select("body").append("svg")
+      .attr("id", "heatmap")
+      .attr("width", 645)
+      .attr("height", 800)
+      .style("display", "block")
+      .style("margin", "auto")
+
+    d3.select("svg#heatmap").append("image")//Source: https://3dwarehouse.sketchup.com/model/10a11b93b4c1c0f78d895c7013c80f77/Basketball-court-NCAA-regulation-2D-model
+      .attr("x", 7) //magic number to line up data with 3 point line of court template
+      .attr("y", 0)
+      .attr("href", "court_template.png ")
+
+    d3.json("13_17_shots.json")
+      .then((data) => {
+        var sum_17 = 0
+        var sum_13 = 0
+        var min = 1000
+        var max = 0
+
+        data.forEach((d, i) =>{
+          sum_17 += Number(d.cnt_2017)
+          sum_13 += Number(d.cnt_2013)
+        })
+
+
+        var colorScale = d3.scaleDiverging()
+          .domain([-0.00004257, 0, 0.000046335]) //min/max of the difference in proportions in a given position
+          .interpolator(d3.interpolateRdYlBu)
+
+
+        var opacityScale = d3.scaleLinear()
+          .domain([0, 0.000046335])
+          .range([0.1, 1]) //floor of 0.1 so all are a bit visible
+
+        d3.select("svg#heatmap").selectAll("rect").data(data.filter(function(d){return d.x_coord < 550})).join("rect")
+          .attr("width", "5")
+          .attr("height", "5")
+          .attr("x", d => {return Number(d.x_coord);})
+          .attr("y", d => {return 22 + Number(d.y_coord);}) //magic number to line up data with court template
+          .attr("fill", d => colorScale(d.cnt_2013/sum_13 - d.cnt_2017/sum_17)) //Takes the shot frequency as a proportion to account for differences in data volume
+          .attr("opacity", d => opacityScale(Math.abs(d.cnt_2013/sum_13 - d.cnt_2017/sum_17)))
+
+        d3.select("svg#heatmap").append("linearGradient")
+          .attr("id", "colorGradRed")
+          .attr("x1", "0%")
+          .attr("x2", "100%")
+          .attr("y2", "0%")
+          .attr("y1", "0%")
+
+        d3.select("linearGradient#colorGradRed").append("stop")
+          .attr("offset", "0%")
+          .attr("stop-color", "#fef0d7")
+
+        d3.select("linearGradient#colorGradRed").append("stop")
+          .attr("offset", "100%")
+          .attr("stop-color", "#B91F00")
+
+        d3.select("svg#heatmap").append("linearGradient")
+          .attr("id", "colorGradBlu")
+          .attr("x1", "0%")
+          .attr("x2", "100%")
+          .attr("y2", "0%")
+          .attr("y1", "0%")
+
+        d3.select("linearGradient#colorGradBlu").append("stop")
+          .attr("offset", "0%")
+          .attr("stop-color", "#03277A")
+
+        d3.select("linearGradient#colorGradBlu").append("stop")
+          .attr("offset", "100%")
+          .attr("stop-color", "#fef0d7")
+
+        d3.select("svg#heatmap").append("rect")
+          .attr("x", "120")
+          .attr("width", "200")
+          .attr("y", "650")
+          .attr("height", "50")
+          .attr("fill", "url(#colorGradBlu)")
+
+        d3.select("svg#heatmap").append("rect")
+          .attr("x", "320")
+          .attr("width", "200")
+          .attr("y", "650")
+          .attr("height", "50")
+          .attr("fill", "url(#colorGradRed)")
+
+        d3.select("svg#heatmap").append("text")
+          .attr("x", "0")
+          .attr("y", "725")
+          .text("More popular in 2013")
+          .attr("font-weight", "bold")
+          .attr("font-family", "courier")
+
+        d3.select("svg#heatmap").append("text")
+          .attr("x", "425")
+          .attr("y", "725")
+          .text("More popular in 2017")
+          .attr("font-weight", "bold")
+          .attr("font-family", "courier")
+
+      })
+</script>
+<div class = "context">
+  <p>So why is this happening? Are three-pointers the way to go for more success? Let's look at what the top teams are doing. In the next graph we explore the average three-point
+  attempt frequency versus league average. We see there is a growing trend to shoot more 3 points for the
+  top-performing teams.</p>
+</div>
+<h1> Tournament #1 seed three-point attempt frequency vs. league average</h1>
+<svg id="q1" width="900" height="500"></svg>
+
+<div id="scatterLegend" class="legend">
+
+</div>
+<script>
+    //line graph - scatterplot
+        const svg1 = d3.select("svg#q1");
+
+        let annotations = svg1.append("g").attr("id","annotations");
+
+        d3.csv("teams.csv", d3.autoType)
+	        .then((data)=>{
+		        data.forEach( (d, i) => {
+                    d['year'] = (d['year']);
+                    d['region'] = (d['region']);
+                    d['three_points_att'] = (d['three_points_att']);
+                    d['three_points_att_rate']=d['three_points_att_rate'];
+            });
+
+        var circle;
+        const width = svg1.attr("width");
+		    const height = svg1.attr("height");
+		    const margins = {"top": 30, "right": 30, "bottom": 30, "left": 30};
+		    const chartWidth = width - margins.left - margins.right;
+        const chartHeight = height - margins.top - margins.bottom;
+
+        const yearExtent =d3.extent(data, d => d['year']);
+
+        const yearScale = d3.scaleLinear().domain(yearExtent).range([0, chartWidth]);
+
+        const rateExtent = d3.extent(data, d => d['three_points_att_rate']);
+        const rateScale = d3.scaleLinear().domain(rateExtent).range([chartHeight, 0]);
+
+        // Y axis
+        let leftAxis = d3.axisLeft(rateScale)
+            .tickFormat(d3.format("~f"))
+        let leftGridlines = d3.axisLeft(rateScale)
+            .tickSize(-chartWidth-500)
+            .tickFormat("")
+        annotations.append("g")
+            .attr("class", "y axis")
+            .attr("transform","translate("+(margins.left)+","+(margins.top+10)+")")
+            .call(leftAxis)
+
+
+        annotations.append("g")
+            .attr("class", "y gridlines")
+            .attr("transform","translate("+(margins.left)+","+(margins.top+10)+")")
+            .call(leftGridlines);
+
+        // X axis
+        let bottomAxis = d3.axisBottom(yearScale)
+            .tickFormat(d3.format("~f"))
+            .ticks(6);
+        let bottomGridlines = d3.axisBottom(yearScale)
+            .tickSize(-chartHeight-100)
+            .tickFormat("")
+        annotations.append("g")
+            .attr("class", "x axis")
+            .attr("transform","translate("+margins.left+","+(chartHeight+margins.top+10)+")")
+            .call(bottomAxis);
+        annotations.append("g")
+            .attr("class", "x gridlines")
+            .attr("transform","translate("+margins.left+","+(chartHeight+margins.top+10)+")")
+            .call(bottomGridlines);
+
+        const regionColor = d3.scaleOrdinal(d3.schemeCategory10);
+
+        let mainChartRegion = svg1.append("g")
+                .attr("id","datapoints")
+                .attr("transform","translate("+margins.left+","+margins.top+")");
+
+        data.forEach( (d, i) => {
+				 circle = mainChartRegion.append("circle")
+					.attr("cx", (yearScale(d['year'])))
+					.attr("cy", (rateScale(d['three_points_att_rate'])))
+                    .attr("r", 4)
+                    .attr("region", d["region"])
+                    .style("fill", regionColor(d['region']));
+            });
+
+        svg1.append("text")
+            .attr("transform",
+            "translate(" + (chartWidth) + " ," + (chartHeight + margins.top + 30) + ")")
+            .style("text-anchor", "middle")
+            .text("Date");
+
+        svg1.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y",  margins.left-25)
+          .attr("x",-25)
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text("3FG");
+
+        svg1.append("text")
+          .text("League Average")
+          .attr("y",  320)
+          .attr("x",760)
+          .style("fill", "#9467bd");
+
+        svg1.append("text")
+          .text("Tournament #1 Seed Avg.")
+          .attr("y",  210)
+          .attr("x",710)
+          .style("fill", "#8c564b");
+
+        let regionLegend = regionColor.domain();
+
+        regionLegend.forEach(function(d,i) {
+            d3.select("#scatterLegend")
+            .append("span").text(d)
+            .style("color",function(){
+                return regionColor(d);
+            })
+        });
+
+        for(i=24;i<29;i++){//League-wide average line
+            let shootline=svg1.append("line")
+                .attr("x1",yearScale(data[i]['year'])+30)
+                .attr("x2",yearScale(data[i+1]['year'])+30)
+                .attr("y1",rateScale(data[i]['three_points_att_rate'])+30)
+                .attr("y2",rateScale(data[i+1]['three_points_att_rate'])+30)
+                .attr("stroke",regionColor(data[i]['region']))
+                .attr("stroke-width","2");
+        }
+
+        for(i=30;i<35;i++){//1 seed average line
+            let shootline=svg1.append("line")
+                .attr("x1",yearScale(data[i]['year'])+30)
+                .attr("x2",yearScale(data[i+1]['year'])+30)
+                .attr("y1",rateScale(data[i]['three_points_att_rate'])+30)
+                .attr("y2",rateScale(data[i+1]['three_points_att_rate'])+30)
+                .attr("stroke", regionColor(data[i]['region']))
+                .attr("stroke-dasharray", "5,5")
+                .attr("stroke-width","2");
+        }
+    });
+    </script>
+
+</body>
+</html>

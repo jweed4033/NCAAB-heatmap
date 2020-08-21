@@ -1,2 +1,2 @@
-# NCAAB-heatmap
-A visualization of how shot location frequencies in men's college basketball have changed over the years.
+# CS3300
+CS/INFO 3300 Project 1
